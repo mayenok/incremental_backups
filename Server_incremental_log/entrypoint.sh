@@ -4,11 +4,11 @@
 
 bash /usr/local/bin/docker-entrypoint.sh mysqld --help
 
-#rm -- /var/log/mysql/* || true
+rm -- /var/log/mysql/* 2>/dev/null || true
 
 _term() {
   echo "Stopping mysql server"
-  MYSQL_PWD=$MARIADB_ROOT_PASSWORD mysqladmin shutdown -uroot --socket="${SOCKET}"
+  MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysqladmin shutdown -uroot
 }
 
 trap _term SIGTERM
@@ -20,4 +20,4 @@ child=$!
 wait "$child"
 
 shopt -s extglob
-mysqlbinlog /var/log/mysql/mysql-bin.+([0-9]) > /Volumes/incremental/$(date +%Y-%m-%d_%H-%M-%S)-inc.sql
+mysqlbinlog --skip-annotate-row-events --base64-output=never --short-form /var/log/mysql/mysql-bin.+([0-9]) > /Volumes/incremental/$(date +%Y-%m-%d_%H-%M-%S)-inc.sql
