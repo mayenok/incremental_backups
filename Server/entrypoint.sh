@@ -20,4 +20,8 @@ child=$!
 wait "$child"
 
 shopt -s extglob
-mysqlbinlog --skip-annotate-row-events --base64-output=never --short-form /var/log/mysql/mysql-bin.+([0-9]) > /Volumes/incremental/$(date +%Y-%m-%d_%H-%M-%S)-inc.sql
+mysqlbinlog --skip-annotate-row-events \
+            --base64-output=never \
+            --short-form \
+            /var/log/mysql/mysql-bin.+([0-9]) \
+            > /volumes/incremental-logs/$(date +%Y-%m-%d_%H-%M-%S).sql

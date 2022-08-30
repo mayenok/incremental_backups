@@ -1,4 +1,5 @@
 FROM mariadb:10.5.13
-RUN chmod -R 777 /var/log/mysql
-CMD ["mysqld"]
-
+COPY enable-binary-log.cnf /etc/mysql/conf.d
+COPY entrypoint.sh /usr/local/bin/
+VOLUME /incremental-logs/
+ENTRYPOINT ["entrypoint.sh"]
